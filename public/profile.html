@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+</head>
+
+<body>
+    <div class="profile-container">
+        <h1>Perfil</h1>
+        <h2>Usuario: <span id="username"></span></h2>
+        <h2>Email: <span id="email"></span></h2>
+    </div>
+<!--OBTENIENDO DATOS USANDO AXIOS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const username = document.querySelector("#username");
+        const email = document.querySelector("#email");
+        const token = localStorage.getItem("token");//se obtiene  el token de  desde el localstorage
+
+        if (!token) {
+            window.location.href = "/login"; 
+        }
+
+        axios.get("api/v1/users/profile/", {//solicitud get
+            headers: {
+                Authorization: `Bearer ${token}`//ACA SE ENVIA EL TOKEN
+            }
+        })
+        .then(({data}) => {
+            username.textContent = data.msg.username;
+            email.textContent = data.msg.email;
+        })
+        .catch(e => {
+            console.error(e);
+            alert("error al cargar el perfil.");
+        });
+    </script>
+<!--SACAR EL CCS DE ACA  QUE NO SE ME OLVIDE-->
+ <style>
+        body {
+            background-color: black; 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 26px;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 18px;
+        }
+
+        span {
+            color: #007BFF;
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>
